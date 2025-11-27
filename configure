@@ -823,7 +823,7 @@ case $OSL in
 		OSDEFS="-fPIC"
 		OSLIBS_DL="-ldl"
 		OSLIBS_THREAD="-lpthread"
-		__defprefix="/usr/local"
+		__defprefix="/usr"
 		;;
 	gnu)
 		OSDEFS="-fPIC"
