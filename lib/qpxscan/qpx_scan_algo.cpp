@@ -468,6 +468,7 @@ write_cleanup:
 
 int qscanner::run_cd_errc()
 {
+	
     cd_errc err, err_tot, err_max;
 	int  errc_data;
     uint32_t lba=lba_sta;
@@ -477,6 +478,7 @@ int qscanner::run_cd_errc()
     lba=0;
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
+	spinup(dev, 10);  //Prevent erroneous c2 spike at beginning of scan
     if (plugin->start_test(CHK_ERRC_CD,lba,speed)) {
 		printf("CD ERRC test init failed!\n");
     	return 2;
@@ -497,10 +499,10 @@ int qscanner::run_cd_errc()
 		clock_gettime(CLOCK_MONOTONIC, &blke);
 		calc_cur_speed(lba-lbao);
 		printf("cur : %6d | %6.2f X %5d kB/s | %5ld | %5ld %5ld %5ld | %5ld %5ld %5ld | %5ld\r", lba, spdX, spdKB,
-				err.bler,
-				err.e11,err.e21,err.e31,
-				err.e12,err.e22,err.e32,
-				err.uncr);
+				err_tot.bler, //This will report erroneous c2 spike at beginning of scan
+		        err_tot.e11,err_tot.e21,err_tot.e31,
+		        err_tot.e21,err_tot.e22,err_tot.e32,
+		        err_tot.uncr);
 		err_tot+=err;
 		err_max.EMAX(err);
 #ifdef USE_FFLUSH
@@ -542,6 +544,7 @@ int qscanner::run_cd_jb()
     if (!attached) return -1;
     if (!(dev->media.type & DISC_CD)) return 1;
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_JB_CD,lba,speed)) {
 		printf("CD Jitter/Asymm test init failed!\n");
     	return 2;
@@ -611,6 +614,7 @@ int qscanner::run_dvd_errc()
 //    lba=0; slba=0;
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_ERRC_DVD,lba,speed)) {
 		printf("DVD ERRC test init failed!\n");
     	return 2;
@@ -691,6 +695,7 @@ int qscanner::run_dvd_jb()
     if (!attached) return -1;
     if (!(dev->media.type & DISC_DVD)) return 1;
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_JB_DVD,lba,speed)) {
 		printf("DVD Jitter/Asymm test init failed!\n");
     	return 2;
@@ -756,6 +761,7 @@ int qscanner::run_fete()
 		return 1;
     }
     wait_unit_ready(dev, 6);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_FETE,lba,speed)) {
 		printf("Scan init failed!\n");
     	return 2;
@@ -815,6 +821,7 @@ int qscanner::run_dvd_ta()
     if (!attached) return -1;
     if (!(dev->media.type & DISC_DVD)) return 1;
 	printf("Running DVD Time Analyser test...\n");
+	spinup(dev, 10);
     if (plugin->start_test(CHK_TA,lba,speed)) {
 		printf("Scan init failed!\n");
     	return 2;
@@ -849,6 +856,7 @@ int qscanner::run_bd_errc()
 //    lba=0; slba=0;
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_ERRC_BD,lba,speed)) {
 		printf("BD ERRC test init failed!\n");
     	return 2;
