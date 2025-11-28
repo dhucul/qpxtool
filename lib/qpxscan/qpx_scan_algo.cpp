@@ -499,11 +499,11 @@ int qscanner::run_cd_errc()
 		clock_gettime(CLOCK_MONOTONIC, &blke);
 		calc_cur_speed(lba-lbao);
 		printf("cur : %6d | %6.2f X %5d kB/s | %5ld | %5ld %5ld %5ld | %5ld %5ld %5ld | %5ld\r", lba, spdX, spdKB,
-				err_tot.bler, //This will report erroneous c2 spike at beginning of scan
-		        err_tot.e11,err_tot.e21,err_tot.e31,
-		        err_tot.e21,err_tot.e22,err_tot.e32,
-		        err_tot.uncr);
-		err_tot+=err;
+				err.bler,
+				err.e11,err.e21,err.e31,
+				err.e12,err.e22,err.e32,
+				err.uncr);
+			err_tot+=err;
 		err_max.EMAX(err);
 #ifdef USE_FFLUSH
 		fflush(stdout);
