@@ -468,6 +468,7 @@ write_cleanup:
 
 int qscanner::run_cd_errc()
 {
+	
     cd_errc err, err_tot, err_max;
 	int  errc_data;
     uint32_t lba=lba_sta;
@@ -477,6 +478,7 @@ int qscanner::run_cd_errc()
     lba=0;
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
+	spinup(dev, 10);  //Prevent erroneous c2 spike at beginning of scan
     if (plugin->start_test(CHK_ERRC_CD,lba,speed)) {
 		printf("CD ERRC test init failed!\n");
     	return 2;
@@ -503,6 +505,9 @@ int qscanner::run_cd_errc()
 				err.uncr);
 		err_tot+=err;
 		err_max.EMAX(err);
+		if (err.e22 > 0)
+		  printf("c2 spike: %5ld\n", err_max.e22);
+		
 #ifdef USE_FFLUSH
 		fflush(stdout);
 #endif
@@ -542,6 +547,7 @@ int qscanner::run_cd_jb()
     if (!attached) return -1;
     if (!(dev->media.type & DISC_CD)) return 1;
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_JB_CD,lba,speed)) {
 		printf("CD Jitter/Asymm test init failed!\n");
     	return 2;
@@ -611,6 +617,7 @@ int qscanner::run_dvd_errc()
 //    lba=0; slba=0;
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_ERRC_DVD,lba,speed)) {
 		printf("DVD ERRC test init failed!\n");
     	return 2;
@@ -691,6 +698,7 @@ int qscanner::run_dvd_jb()
     if (!attached) return -1;
     if (!(dev->media.type & DISC_DVD)) return 1;
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_JB_DVD,lba,speed)) {
 		printf("DVD Jitter/Asymm test init failed!\n");
     	return 2;
@@ -756,6 +764,7 @@ int qscanner::run_fete()
 		return 1;
     }
     wait_unit_ready(dev, 6);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_FETE,lba,speed)) {
 		printf("Scan init failed!\n");
     	return 2;
@@ -815,6 +824,7 @@ int qscanner::run_dvd_ta()
     if (!attached) return -1;
     if (!(dev->media.type & DISC_DVD)) return 1;
 	printf("Running DVD Time Analyser test...\n");
+	spinup(dev, 10);
     if (plugin->start_test(CHK_TA,lba,speed)) {
 		printf("Scan init failed!\n");
     	return 2;
@@ -849,6 +859,7 @@ int qscanner::run_bd_errc()
 //    lba=0; slba=0;
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
+	spinup(dev, 10);
     if (plugin->start_test(CHK_ERRC_BD,lba,speed)) {
 		printf("BD ERRC test init failed!\n");
     	return 2;
