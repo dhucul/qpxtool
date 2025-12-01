@@ -253,7 +253,9 @@ void TestDialog::checkSimul()
 
 void TestDialog::start()
 {
+	elabel->setText("test"); //Allow empty text
 	saveData();
+	
 	if (elabel->text().isEmpty()) {
 		QMessageBox::information(this, tr("Media label is empty!"), tr("You have to define a media label!"));
 		return;
