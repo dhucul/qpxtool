@@ -1,6 +1,14 @@
 QPxTool ChangeLog
 
 ***********************************************
+
+** 0.8.1 patchlevel 7 (2025-11-28)
+    - fixed artificial c2 spike at beginning of scan 
+    - Running a test no longer requires a label
+    - default installation for linux is now /usr instead of /usr/local
+    - add c2 spike message for command line
+    
+***********************************************
 ** 0.8.1 (2020-11-10)
 
     common:
