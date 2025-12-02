@@ -479,6 +479,7 @@ int qscanner::run_cd_errc()
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
 	spinup(dev, 10);  //Prevent erroneous c2 spike at beginning of scan
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_ERRC_CD,lba,speed)) {
 		printf("CD ERRC test init failed!\n");
     	return 2;
@@ -548,6 +549,7 @@ int qscanner::run_cd_jb()
     if (!(dev->media.type & DISC_CD)) return 1;
 //    seek(dev,lba);
 	spinup(dev, 10);
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_JB_CD,lba,speed)) {
 		printf("CD Jitter/Asymm test init failed!\n");
     	return 2;
@@ -618,6 +620,7 @@ int qscanner::run_dvd_errc()
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
 	spinup(dev, 10);
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_ERRC_DVD,lba,speed)) {
 		printf("DVD ERRC test init failed!\n");
     	return 2;
@@ -699,6 +702,7 @@ int qscanner::run_dvd_jb()
     if (!(dev->media.type & DISC_DVD)) return 1;
 //    seek(dev,lba);
 	spinup(dev, 10);
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_JB_DVD,lba,speed)) {
 		printf("DVD Jitter/Asymm test init failed!\n");
     	return 2;
@@ -765,6 +769,7 @@ int qscanner::run_fete()
     }
     wait_unit_ready(dev, 6);
 	spinup(dev, 10);
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_FETE,lba,speed)) {
 		printf("Scan init failed!\n");
     	return 2;
@@ -825,6 +830,7 @@ int qscanner::run_dvd_ta()
     if (!(dev->media.type & DISC_DVD)) return 1;
 	printf("Running DVD Time Analyser test...\n");
 	spinup(dev, 10);
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_TA,lba,speed)) {
 		printf("Scan init failed!\n");
     	return 2;
@@ -860,6 +866,7 @@ int qscanner::run_bd_errc()
 	errc_data = plugin->errc_data();
 //    seek(dev,lba);
 	spinup(dev, 10);
+	wait_unit_ready(dev, 6);
     if (plugin->start_test(CHK_ERRC_BD,lba,speed)) {
 		printf("BD ERRC test init failed!\n");
     	return 2;
